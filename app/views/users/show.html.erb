@@ -1,0 +1,36 @@
+<div class="user-info">
+    <% if @user.profile_photo.attached? %>
+        <image src=<%= (url_for(@user.profile_photo)) %>  alt='profile photo' class="profile_photo">
+    <% end %> 
+
+    <% if session[:user_id] == @user.id %>
+        <h1> Welcome, <%= @user.name %>! </h1><br>
+        <%= button_to "Edit Profile", edit_user_path, method: :get, class: "btn btn-dark" %>
+        <%= button_to "Delete Account", user_path(@user), method: :delete, class: "btn btn-dark" %><br>
+    <% else %>
+        <h1><%= @user.username %></h1>
+        
+        <% if !@user.followers.any? {|f| f.id == session[:user_id]} %>
+            <%= button_to "Follow", follows_path, params: {follow: {follower_id: session[:user_id], followee_id: @user.id}, to: user_path(@user)} %>
+        <% else %>
+            <% follow = Follow.where("follower_id = ? AND followee_id = ?", session[:user_id], @user.id) %>
+            <%= button_to "Unfollow", follows_path, params: {follow: follow , to: user_path(@user)} %> 
+        <% end %>
+
+    <% end %>
+
+    <p><%= @user.bio %><p>
+</div>
+<hr>
+<div class='card-container'>
+    <% @user.posts.each do |post| %>
+        <div class="card" style="width: 18rem;">
+            <image src=<%= url_for(post.photo) %> class="card-img-top" alt="post photo">
+            <div class="card-body">
+                <h6 class="card-text">Likes: <%= post.likes.count %></h6>
+                <p class="card-text"><%= post.caption %></p>   
+                <%= button_to "Like", likes_path, params: {like: {user_id: session[:user_id], post_id: post.id}, to: user_path(@user)} %>   
+            </div>
+        </div>
+    <% end %>
+</div>

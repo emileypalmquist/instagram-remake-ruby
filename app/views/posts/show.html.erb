@@ -1,0 +1,12 @@
+<div class='card-container-index'>
+    <div class="card" style="width: 18rem;">
+        <image src=<%= url_for(@post.photo) %> class="card-img-top" alt="post photo">
+        <div class="card-body">
+            <h5 class="card-title"><%= link_to @post.user.username, user_path(@post.user) %></h5>
+            <h6 class="card-text">Likes: <%= @post.likes.count %></h6>
+            <p class="card-text"><%= @post.caption %></p>
+            <%= button_to "Like", likes_path, params: {like: {user_id: session[:user_id], post_id: @post.id}, to: post_path(@post)} %>
+            <h6><%= @post.created_at.strftime("%B %d") == Time.now.strftime("%B %d") ? @post.created_at.strftime("%I:%M %p") : @post.created_at.strftime("%B %d, %y %I:%M %p") %></h6>
+        </div>
+    </div>
+</div>

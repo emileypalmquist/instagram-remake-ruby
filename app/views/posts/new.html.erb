@@ -1,0 +1,19 @@
+<% if flash[:error] %>
+    <ul>
+        <% flash[:error].each do |m| %>
+            <li ><%= m %></li>
+        <% end %>
+    </ul>
+<% end %>
+
+<%= form_for @post do |f| %>
+    <%= f.label :photo %>:
+    <%= f.file_field :photo, class: "btn btn-dark" %><br>
+
+    <%= f.label :caption %>:
+    <%= f.text_field :caption %><br>
+
+    <%= f.hidden_field :user_id, value: @user.id %><br>
+
+    <%= f.submit "Post", class: "btn btn-dark" %><br>
+<% end %>
